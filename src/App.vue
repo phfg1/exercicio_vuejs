@@ -1,47 +1,55 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { reactive, computed } from 'vue';
+
+const estado = reactive({
+  numA: 0,
+  numB: 0,
+  operacao: 'soma',
+});
+
+const resultado = computed(() => {
+  const numeroA = parseFloat(estado.numA) || 0;
+  const numeroB = parseFloat(estado.numB) || 0;
+
+  switch (estado.operacao) {
+    case 'soma':
+      return numeroA + numeroB;
+    case 'subtrair':
+      return numeroA - numeroB;
+    case 'multiplicar':
+      return numeroA * numeroB;
+    case 'dividir':
+      return numeroB !== 0 ? numeroA / numeroB : 'Erro: o divisor deve ser diferente de zero';
+    default:
+      return 0;
+  }
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="container">
+    <header class="p-5 mb-4 mt-4 bg-secondary rounded-3">
+      <h1 class="fw-bold text-center">Calculadora aritmética</h1>
+      <div class="row">
+        <div class="col-6">
+          <p class="mt-4">
+            <input type="number" required placeholder="Digite um número" v-model.number="estado.numA">
+            <input type="number" required placeholder="Digite outro número" v-model.number="estado.numB">
+          </p>
+          <p class="text-start mt-3"><b>Resultado:</b> {{ resultado }} </p>
+        </div>
+        <div class="col-6">
+          <p class="text-end mt-4">
+            <span class="fw-bold me-2">Selecione a operação desejada:</span>
+            <select v-model="estado.operacao">
+              <option value="soma">Somar +</option>
+              <option value="subtrair">Subtrair -</option>
+              <option value="multiplicar">Multiplicar *</option>
+              <option value="dividir">Dividir /</option>
+            </select>
+          </p>          
+        </div>
+      </div>
+    </header>
+  </div>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
