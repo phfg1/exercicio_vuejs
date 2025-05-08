@@ -1,5 +1,8 @@
 <script setup>
 import { reactive, computed } from 'vue';
+import InputNumerico from './components/InputNumerico.vue';
+import SeletorOperacao from './components/SeletorOperacao.vue';
+import ResultadoCalculo from './components/ResultadoCalculo.vue';
 
 const estado = reactive({
   numA: 0,
@@ -7,7 +10,7 @@ const estado = reactive({
   operacao: 'soma',
 });
 
-const resultado = computed(() => {
+const resultadoCalculado = computed(() => {
   const numeroA = parseFloat(estado.numA) || 0;
   const numeroB = parseFloat(estado.numB) || 0;
 
@@ -31,25 +34,33 @@ const resultado = computed(() => {
     <header class="p-5 mb-4 mt-4 bg-secondary rounded-3">
       <h1 class="fw-bold text-center">Calculadora aritmética</h1>
       <div class="row">
-        <div class="col-6">
-          <p class="mt-4">
-            <input type="number" required placeholder="Digite um número" v-model.number="estado.numA">
-            <input type="number" required placeholder="Digite outro número" v-model.number="estado.numB">
-          </p>
-          <p class="text-start mt-3"><b>Resultado:</b> {{ resultado }} </p>
+        <div class="col-6 d-flex">
+          <InputNumerico 
+            class="me-3"
+            placeholder="Digite um número"
+            v-model="estado.numA"
+          />
+          <InputNumerico
+            placeholder="Digite outro número"
+            v-model="estado.numB"
+          />          
         </div>
         <div class="col-6">
-          <p class="text-end mt-4">
-            <span class="fw-bold me-2">Selecione a operação desejada:</span>
-            <select v-model="estado.operacao">
-              <option value="soma">Somar +</option>
-              <option value="subtrair">Subtrair -</option>
-              <option value="multiplicar">Multiplicar *</option>
-              <option value="dividir">Dividir /</option>
-            </select>
-          </p>          
+          <SeletorOperacao v-model="estado.operacao" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <ResultadoCalculo :resultado="resultadoCalculado" />
         </div>
       </div>
     </header>
   </div>
 </template>
+
+<style scoped>
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+</style>
